@@ -4,8 +4,8 @@ ARG VERSION
 ARG TARGETPLATFORM
 
 # Copy the appropriate binary based on the target platform
-COPY ./builds/PandoraHelper-${VERSION}-linux-amd64/PandoraHelper /app/PandoraHelper-amd64
-COPY ./builds/PandoraHelper-${VERSION}-linux-arm64/PandoraHelper /app/PandoraHelper-arm64
+COPY ./builds/PandoraHelper-main-linux-amd64/PandoraHelper /app/PandoraHelper-amd64
+COPY ./builds/PandoraHelper-main-linux-arm64/PandoraHelper /app/PandoraHelper-arm64
 
 RUN if [ "${TARGETPLATFORM}" = "linux/arm64" ]; then \
         cp /app/PandoraHelper-arm64 /app/PandoraHelper; \
