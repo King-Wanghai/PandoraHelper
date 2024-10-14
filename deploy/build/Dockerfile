@@ -2,6 +2,9 @@ FROM alpine:latest AS builder
 WORKDIR /app
 ARG TARGETPLATFORM
 
+# Check the final structure of /app
+RUN ls -lR /app
+
 # Copy the appropriate binary based on the target platform
 COPY ./builds/PandoraHelper-main-linux-amd64/PandoraHelper /app/PandoraHelper-amd64
 COPY ./builds/PandoraHelper-main-linux-arm64/PandoraHelper /app/PandoraHelper-arm64
@@ -18,7 +21,7 @@ WORKDIR /app
 ARG TARGETPLATFORM
 
 # Only copy the relevant binary from the builder stage
-COPY --from=builder /app/PandoraHelper /app/PandoraHelper
+# COPY --from=builder /app/PandoraHelper /app/PandoraHelper
 
 # Set executable permissions for the binary
 # RUN chmod +x /app/PandoraHelper
