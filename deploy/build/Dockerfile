@@ -6,7 +6,7 @@ ARG TARGETPLATFORM
 # Copy the appropriate binary based on the target platform
 COPY builds/PandoraHelper-main-linux-amd64/PandoraHelper /app/PandoraHelper-amd64
 
-cp /app/PandoraHelper-amd64 /app/PandoraHelper;
+RUN cp /app/PandoraHelper-amd64 /app/PandoraHelper;
 
 FROM alpine:latest
 WORKDIR /app
