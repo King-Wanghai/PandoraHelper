@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         goos: [linux]
-        goarch: [amd64]
+        goarch: [arm64]
 
     steps:
     - name: Checkout code
@@ -66,6 +66,9 @@ jobs:
       with:
         name: builds
         path: builds/
+
+    - name: Checkout code
+      uses: actions/checkout@v3
 
     - name: List files for debugging
       run: |
