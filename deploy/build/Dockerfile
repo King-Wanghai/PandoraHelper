@@ -3,15 +3,13 @@ WORKDIR /app
 ARG VERSION
 ARG TARGETPLATFORM
 
-# Copy the appropriate binary based on the target platform
-COPY ./builds/PandoraHelper-${VERSION}-linux-amd64/PandoraHelper /app/PandoraHelper-amd64
-COPY ./builds/PandoraHelper-${VERSION}-linux-arm64/PandoraHelper /app/PandoraHelper-arm64
-
-RUN if [ "${TARGETPLATFORM}" = "linux/arm64" ]; then \
-        cp /app/PandoraHelper-arm64 /app/PandoraHelper; \
-    else \
-        cp /app/PandoraHelper-amd64 /app/PandoraHelper; \
-    fi
+# 动态选择要复制的二进制文件
+RUN case "${TARGETPLATFORM}" in \
+        "linux/amd64") BINARY_PATH="builds/PandoraHelper-${VERSION}-linux-amd64/PandoraHelper" ;; \
+        "linux/arm64") BINARY_PATH="builds/PandoraHelper-${VERSION}-linux-arm64/PandoraHelper" ;; \
+        *) echo "Unsupported platform: ${TARGETPLATFORM}" && exit 1 ;; \
+    esac && \
+    cp $BINARY_PATH /app/PandoraHelper
 
 FROM alpine:latest
 WORKDIR /app
