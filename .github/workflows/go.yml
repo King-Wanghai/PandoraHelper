@@ -85,6 +85,9 @@ jobs:
 
     - name: Run Makefile tasks for release
       run: make docker  # 调用 Makefile 中的 docker 目标
+      env:
+        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Create GitHub Release and Upload Assets
       uses: ncipollo/release-action@v1.14.0
