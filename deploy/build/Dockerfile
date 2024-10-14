@@ -12,7 +12,7 @@ RUN if [ "${TARGETPLATFORM}" = "linux/arm64" ]; then \
         cp /app/PandoraHelper-amd64 /app/PandoraHelper; \
     fi
 
-FROM alpine:latest
+FROM alpine:latest AS builder
 WORKDIR /app
 ARG TARGETPLATFORM
 
@@ -25,4 +25,4 @@ RUN chmod +x /app/PandoraHelper
 RUN ls -lR /app
 
 # CMD ["/app/PandoraHelper"]
-CMD ["/bin/sh"]
+CMD ["echo", "Hello, Docker!"]
