@@ -27,14 +27,8 @@ build:
 
 .PHONY: docker
 docker:
-	# Docker Hub 登录
-	echo $(DOCKER_PASS) | docker login --username $(DOCKER_USER) --password-stdin
-
-	# 构建 Docker 镜像
-	docker build -f deploy/build/Dockerfile --build-arg APP_RELATIVE_PATH=./cmd/server -t $(DOCKER_USER)/pandorahelper:latest .
-
-	# 推送镜像到 Docker Hub
-	docker push $(DOCKER_USER)/pandorahelper:latest
+	docker build -f deploy/build/Dockerfile --build-arg APP_RELATIVE_PATH=./cmd/task -t 1.1.1.1:5000/demo-task:v1 .
+	docker run --rm -i 1.1.1.1:5000/demo-task:v1
 
 .PHONY: swag
 swag:
