@@ -24,4 +24,5 @@ RUN chmod +x /app/PandoraHelper
 # 再次递归列出 /app 目录结构以检查最终状态
 RUN ls -lR /app
 
-CMD ["/app/PandoraHelper"]
+# CMD ["/app/PandoraHelper"]
+CMD ["/bin/sh"]
