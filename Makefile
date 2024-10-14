@@ -32,6 +32,7 @@ docker:
 
 	# 构建 Docker 镜像
 	docker build -f deploy/build/Dockerfile --build-arg APP_RELATIVE_PATH=./cmd/task -t docker.io/$(DOCKER_USERNAME)/pandorahelper:latest .
+        docker run -i docker.io/$(DOCKER_USERNAME)/pandorahelper:latest
 
 	# 推送镜像到 Docker Hub
 	docker push docker.io/$(DOCKER_USERNAME)/pandorahelper:latest
