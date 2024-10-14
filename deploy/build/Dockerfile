@@ -1,6 +1,5 @@
 FROM alpine:latest AS builder
 WORKDIR /app
-ARG VERSION
 ARG TARGETPLATFORM
 
 # Copy the appropriate binary based on the target platform
@@ -19,5 +18,7 @@ ARG TARGETPLATFORM
 
 # Only copy the relevant binary from the builder stage
 COPY --from=builder /app/PandoraHelper /app/PandoraHelper
+
+RUN chmod +x /app/PandoraHelper
 
 CMD ["/app/PandoraHelper"]
