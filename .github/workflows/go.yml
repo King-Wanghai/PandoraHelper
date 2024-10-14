@@ -80,6 +80,13 @@ jobs:
           --build-arg VERSION=${{ github.ref_name }} \
           --build-arg TARGETPLATFORM=linux/amd64 \
           -t docker.io/${{ secrets.DOCKER_USERNAME }}/pandorahelper:latest .
+
+    - name: List Docker image file structure
+      run: |
+        docker create --name temp_container docker.io/${{ secrets.DOCKER_USERNAME }}/pandorahelper:latest
+        docker cp temp_container:/app ./app_contents
+        docker rm temp_container
+        ls -R ./app_contents
     
     - name: Push Docker image with version tag
       run: |
