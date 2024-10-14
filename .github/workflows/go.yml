@@ -70,6 +70,9 @@ jobs:
       with:
         path: builds
 
+    - name: List files
+      run: ls -a
+
     - name: List files for debugging
       run: ls -R ./builds
 
