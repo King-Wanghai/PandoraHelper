@@ -14,8 +14,18 @@ jobs:
 
     strategy:
       matrix:
-        goos: [linux]
-        goarch: [amd64, arm64]
+        goos: [linux, windows, darwin]
+        goarch: [amd64, arm64, arm]
+        goarm: [7]
+        exclude:
+          - goos: darwin
+            goarch: arm
+          - goos: darwin
+            goarch: arm64
+          - goos: windows
+            goarch: arm
+          - goos: windows
+            goarch: arm64
 
     steps:
     - name: Checkout code
@@ -50,12 +60,6 @@ jobs:
     - name: Compress binaries
       run: |
         zip -r builds/PandoraHelper-${{ github.ref_name }}-${{ matrix.goos }}-${{ matrix.goarch }}.zip builds/PandoraHelper-${{ github.ref_name }}-${{ matrix.goos }}-${{ matrix.goarch }}
-        
-    - name: Upload builds artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: builds
-        path: builds/
 
   release:
     runs-on: ubuntu-latest
@@ -63,32 +67,22 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
-      
+
     - name: Download artifacts
       uses: actions/download-artifact@v3
       with:
-        name: builds
-        path: builds/
+        path: builds
 
     - name: List files for debugging
-      run: |
-        ls -R builds
+      run: ls -R builds
 
-    - name: Build and tag Docker image
-      run: |
-        docker build -f deploy/build/Dockerfile \
-          --build-arg VERSION=${{ github.ref_name }} \
-          --build-arg TARGETPLATFORM=linux/amd64 \
-          -t docker.io/${{ secrets.DOCKER_USERNAME }}/pandorahelper:latest .
+    - name: Run Makefile tasks for release
+      run: make docker  # 调用 Makefile 中的 docker 目标
 
-    - name: List Docker image file structure
-      run: |
-        docker create --name temp_container docker.io/${{ secrets.DOCKER_USERNAME }}/pandorahelper:latest
-        docker cp temp_container:/app ./app_contents
-        docker rm temp_container
-        ls -R ./app_contents
-    
-    - name: Push Docker image with version tag
-      run: |
-        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login docker.io -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-        docker push docker.io/${{ secrets.DOCKER_USERNAME }}/pandorahelper:latest
+    - name: Create GitHub Release and Upload Assets
+      uses: ncipollo/release-action@v1.14.0
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ github.ref_name }}
+        name: Release ${{ github.ref_name }}
+        artifacts: builds/*.zip
