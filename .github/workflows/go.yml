@@ -72,7 +72,7 @@ jobs:
 
     - name: List files for debugging
       run: |
-        ls -a
+        cd ../../
         ls -R builds
 
     - name: Build and tag Docker image
