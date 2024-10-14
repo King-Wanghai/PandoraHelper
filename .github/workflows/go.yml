@@ -71,7 +71,7 @@ jobs:
         path: builds
 
     - name: List files
-      run:
+      run: |
         cd ..
         ls -a
 
