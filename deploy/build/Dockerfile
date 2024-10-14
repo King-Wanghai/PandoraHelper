@@ -19,9 +19,9 @@ ARG TARGETPLATFORM
 # Only copy the relevant binary from the builder stage
 COPY --from=builder /app/PandoraHelper /app/PandoraHelper
 
+RUN chmod +x /app/PandoraHelper
+
 # 再次递归列出 /app 目录结构以检查最终状态
 RUN ls -lR /app
-
-RUN chmod +x /app/PandoraHelper
 
 CMD ["/app/PandoraHelper"]
