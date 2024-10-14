@@ -70,18 +70,6 @@ jobs:
       with:
         path: builds
 
-    - name: List files
-      run: |
-        echo "Current directory name:"
-        basename "$PWD"
-        echo "Files in the parent directory:"
-        cd ..
-        cd ..
-        ls -a
-
-    - name: List files for debugging
-      run: ls -R ./builds
-
     - name: Create GitHub Release and Upload Assets
       uses: ncipollo/release-action@v1.14.0
       with:
