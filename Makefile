@@ -27,8 +27,14 @@ build:
 
 .PHONY: docker
 docker:
-	docker build -f deploy/build/Dockerfile --build-arg APP_RELATIVE_PATH=./cmd/task -t 1.1.1.1:5000/demo-task:v1 .
-	docker run --rm -i 1.1.1.1:5000/demo-task:v1
+	# Docker Hub 登录
+	echo $(DOCKER_PASS) | docker login --username $(DOCKER_USER) --password-stdin
+
+	# 构建 Docker 镜像
+	docker build -f deploy/build/Dockerfile --build-arg APP_RELATIVE_PATH=./cmd/task -t $(DOCKER_USER)/demo-task:v1 .
+
+	# 推送镜像到 Docker Hub
+	docker push $(DOCKER_USER)/demo-task:v1
 
 .PHONY: swag
 swag:
