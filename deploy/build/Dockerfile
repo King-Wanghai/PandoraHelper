@@ -3,8 +3,7 @@ WORKDIR /app
 ARG TARGETPLATFORM
 
 # Check the final structure of /app
-RUN ls -lR ../../
-RUN ls -lR ../
+RUN ls -lR /
 
 # Copy the appropriate binary based on the target platform
 COPY ../../builds/PandoraHelper-main-linux-amd64/PandoraHelper /app/PandoraHelper-amd64
