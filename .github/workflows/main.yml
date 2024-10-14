@@ -1,0 +1,102 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - '*'  # 当推送 Tag 时触发
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        goos: [linux, windows, darwin]
+        goarch: [amd64, arm64, arm]
+        goarm: [7]
+        exclude:
+          - goos: darwin
+            goarch: arm
+          - goos: darwin
+            goarch: arm64
+          - goos: windows
+            goarch: arm
+          - goos: windows
+            goarch: arm64
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.20'  # 请根据你的需求选择 Go 版本
+
+    - name: Install Go dependencies
+      run: |
+        go env -w GO111MODULE=on
+        go mod tidy
+        go mod download
+
+    - name: Install UPX and zip
+      run: sudo apt-get install -y upx-ucl zip
+
+    - name: Build binary
+      run: |
+        mkdir -p builds/PandoraHelper-${{ github.ref_name }}-${{ matrix.goos }}-${{ matrix.goarch }}
+        mkdir -p builds/PandoraHelper-${{ github.ref_name }}-${{ matrix.goos }}-${{ matrix.goarch }}/data
+        if [ "${{ matrix.goarch }}" = "arm" ]; then
+          GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} GOARM=${{ matrix.goarm }} go build -ldflags="-s -w" -o builds/PandoraHelper-${{ github.ref_name }}-${{ matrix.goos }}-${{ matrix.goarch }}/PandoraHelper ./cmd/server/main.go
+        else
+          GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }} go build -ldflags="-s -w" -o builds/PandoraHelper-${{ github.ref_name }}-${{ matrix.goos }}-${{ matrix.goarch }}/PandoraHelper ./cmd/server/main.go
+        fi
+        upx builds/PandoraHelper-${{ github.ref_name }}-${{ matrix.goos }}-${{ matrix.goarch }}/PandoraHelper*
+        cp -r data/config.json builds/PandoraHelper-${{ github.ref_name }}-${{ matrix.goos }}-${{ matrix.goarch }}/data/
+
+    - name: Compress binaries
+      run: |
+        zip -r builds/PandoraHelper-${{ github.ref_name }}-${{ matrix.goos }}-${{ matrix.goarch }}.zip builds/PandoraHelper-${{ github.ref_name }}-${{ matrix.goos }}-${{ matrix.goarch }}
+
+    - name: Upload builds artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: builds
+        path: builds/
+
+  release:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+  
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: builds
+          path: builds/
+  
+      - name: List files for debugging
+        run: |
+          ls -a
+          ls -R builds
+  
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+  
+      - name: Build and push Docker image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/pandorahelper:${{ github.ref_name }} \
+                        -t ${{ secrets.DOCKER_USERNAME }}/pandorahelper:latest \
+                        --build-arg TARGETPLATFORM=linux/amd64 \
+                        --push .
+        env:
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
