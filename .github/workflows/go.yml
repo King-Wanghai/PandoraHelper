@@ -76,6 +76,7 @@ jobs:
         basename "$PWD"
         echo "Files in the parent directory:"
         cd ..
+        cd ..
         ls -a
 
     - name: List files for debugging
