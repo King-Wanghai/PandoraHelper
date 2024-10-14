@@ -28,13 +28,13 @@ build:
 .PHONY: docker
 docker:
 	# Docker Hub 登录
-	echo $(secrets.DOCKER_USERNAME) | docker login --username $(secrets.DOCKER_USERNAME) --password-stdin
+	echo $(DOCKER_PASSWORD) | docker login --username $(DOCKER_USERNAME) --password-stdin
 
 	# 构建 Docker 镜像
-	docker build -f deploy/build/Dockerfile --build-arg APP_RELATIVE_PATH=./cmd/task -t docker.io/${{ secrets.DOCKER_USERNAME }}/pandorahelper:latest .
+	docker build -f deploy/build/Dockerfile --build-arg APP_RELATIVE_PATH=./cmd/task -t docker.io/$(DOCKER_USERNAME)/pandorahelper:latest .
 
 	# 推送镜像到 Docker Hub
-	docker push $(DOCKER_USER)/PandoraHelper:latest
+	docker push docker.io/$(DOCKER_USERNAME)/pandorahelper:latest
 
 .PHONY: swag
 swag:
