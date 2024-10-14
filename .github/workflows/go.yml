@@ -89,7 +89,7 @@ jobs:
         docker buildx build --platform linux/amd64,linux/arm64 \
           -f deploy/build/Dockerfile \
           --build-arg VERSION=${{ github.ref_name }} \
-          --tag ${{ secrets.DOCKER_USERNAME }}/pandorahelper:latest \
+          --tag ${{ secrets.DOCKER_USER }}/pandorahelper:latest \
           --push .
 
   release:
