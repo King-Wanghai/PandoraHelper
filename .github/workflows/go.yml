@@ -71,7 +71,8 @@ jobs:
     - name: Download artifacts
       uses: actions/download-artifact@v3
       with:
-        path: builds
+        name: builds
+        path: builds/
 
     - name: List files for debugging
       run: ls -R builds
