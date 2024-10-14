@@ -81,7 +81,9 @@ jobs:
         path: builds/
 
     - name: List files for debugging
-      run: ls -R builds
+      run: |
+        ls -a
+        ls -R builds
 
     - name: Run Makefile tasks for release
       run: make docker  # 调用 Makefile 中的 docker 目标
