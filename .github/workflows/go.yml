@@ -86,8 +86,11 @@ jobs:
 
     - name: Build and push Docker images
       run: |
-        docker build -f deploy/build/Dockerfile --build-arg APP_RELATIVE_PATH=./cmd/server -t ${{ secrets.DOCKER_USER }}/pandorahelper:latest .
-        docker push ${{ secrets.DOCKER_USER }}/pandorahelper:latest
+        docker buildx build --platform linux/amd64,linux/arm64 \
+          -f deploy/build/Dockerfile \
+          --build-arg VERSION=${{ github.ref_name }} \
+          --tag ${{ secrets.DOCKER_USERNAME }}/pandorahelper:latest \
+          --push .
 
   release:
     runs-on: ubuntu-latest
