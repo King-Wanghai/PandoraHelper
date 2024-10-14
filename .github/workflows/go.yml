@@ -1,11 +1,6 @@
-name: Build and Release
+name: Build and Release go
 
 on:
-  push:
-    branches:
-      - main
-    tags:
-      - '*'  # 当推送 Tag 时触发
   workflow_dispatch:
 
 jobs:
