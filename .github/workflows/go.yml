@@ -72,6 +72,9 @@ jobs:
 
     - name: List files
       run: |
+        echo "Current directory name:"
+        basename "$PWD"
+        echo "Files in the parent directory:"
         cd ..
         ls -a
 
