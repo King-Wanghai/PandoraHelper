@@ -60,6 +60,12 @@ jobs:
     - name: Compress binaries
       run: |
         zip -r builds/PandoraHelper-${{ github.ref_name }}-${{ matrix.goos }}-${{ matrix.goarch }}.zip builds/PandoraHelper-${{ github.ref_name }}-${{ matrix.goos }}-${{ matrix.goarch }}
+        
+    - name: Upload builds artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: builds
+        path: builds/
 
   release:
     runs-on: ubuntu-latest
@@ -68,7 +74,13 @@ jobs:
     - name: Download artifacts
       uses: actions/download-artifact@v3
       with:
-        path: builds
+        name: builds
+        path: builds/
+
+    - name: List files for debugging
+      run: |
+        ls -a
+        ls -R builds
 
     - name: Create GitHub Release and Upload Assets
       uses: ncipollo/release-action@v1.14.0
