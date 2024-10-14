@@ -61,6 +61,12 @@ jobs:
       run: |
         zip -r builds/PandoraHelper-${{ github.ref_name }}-${{ matrix.goos }}-${{ matrix.goarch }}.zip builds/PandoraHelper-${{ github.ref_name }}-${{ matrix.goos }}-${{ matrix.goarch }}
 
+    - name: Upload builds artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: builds
+        path: builds/
+
   release:
     runs-on: ubuntu-latest
     needs: build
