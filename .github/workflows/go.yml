@@ -58,7 +58,9 @@ jobs:
         path: builds/
 
     - name: List files for debugging
-      run: ls -a
+      run: |
+        cd builds
+        ls -a
 
     - name: Build and tag Docker image
       run: |
