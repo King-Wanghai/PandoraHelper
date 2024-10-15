@@ -78,8 +78,7 @@ jobs:
   
       - name: Build and push Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/pandorahelper:${{ github.ref_name }} \
-                        -t ${{ secrets.DOCKER_USERNAME }}/pandorahelper:latest \
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/pandora-helper:latest \
                         --build-arg TARGETPLATFORM=linux/amd64 \
                         --push .
         env:
