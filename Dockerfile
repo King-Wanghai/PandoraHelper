@@ -3,7 +3,7 @@ FROM alpine:latest AS builder
 WORKDIR /app
 
 # Copy the amd64 binary
-COPY ./builds/PandoraHelper-main-linux-amd64/PandoraHelper /app/PandoraHelper
+COPY ../../builds/PandoraHelper-main-linux-amd64/PandoraHelper /app/PandoraHelper
 
 # Final image
 FROM alpine:latest
@@ -19,5 +19,4 @@ WORKDIR /app
 RUN ls -a
 
 # Run the binary
-# CMD ["/app/PandoraHelper"]
-CMD ["echo", "Hello, Docker!"]
+CMD ["/app/PandoraHelper"]
