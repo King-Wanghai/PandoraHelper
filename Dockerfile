@@ -16,7 +16,7 @@ COPY --from=builder /app/PandoraHelper /app/PandoraHelper
 RUN chmod +x /app/PandoraHelper
 
 # Check the final structure of /app
-RUN ls -lR /app
+RUN ls -a
 
 # Run the binary
 CMD ["/app/PandoraHelper"]
