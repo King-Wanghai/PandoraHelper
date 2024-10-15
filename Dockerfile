@@ -5,7 +5,7 @@ FROM alpine:latest
 WORKDIR /app
 
 # 下载并安装更高版本的 glibc
-ENV GLIBC_VERSION="2.34-r0"
+ENV GLIBC_VERSION=2.34-r0
 
 RUN apk add --no-cache ca-certificates \
     && apk add --no-cache --virtual .build-deps curl \
