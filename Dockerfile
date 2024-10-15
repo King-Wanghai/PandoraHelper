@@ -1,16 +1,19 @@
 # 使用 Alpine 作为基础镜像
 FROM alpine:latest
+
+# 设置工作目录
 WORKDIR /app
 
-# 安装 glibc 兼容包（确保你使用的源是可用的）
+# 安装必要的依赖和 glibc
 RUN apk --no-cache add ca-certificates \
     && apk --no-cache add --virtual .build-deps curl \
-    && curl -Lo glibc-2.36-r0.apk https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.36-r0/glibc-2.36-r0.apk \
-    && curl -Lo glibc-bin-2.36-r0.apk https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.36-r0/glibc-bin-2.36-r0.apk \
-    && apk add --no-cache glibc-2.36-r0.apk glibc-bin-2.36-r0.apk \
+    && curl -Lo /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub \
+    && curl -Lo glibc.apk https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.36-r0/glibc-2.36-r0.apk \
+    && curl -Lo glibc-bin.apk https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.36-r0/glibc-bin-2.36-r0.apk \
+    && apk add glibc.apk glibc-bin.apk \
     && /usr/glibc-compat/bin/ldconfig \
     && apk del .build-deps \
-    && rm -rf glibc-2.36-r0.apk glibc-bin-2.36-r0.apk
+    && rm -rf glibc.apk glibc-bin.apk
 
 # 复制 PandoraHelper 二进制文件到 /app 目录
 COPY ./builds/PandoraHelper-main-linux-amd64/PandoraHelper /app/PandoraHelper
