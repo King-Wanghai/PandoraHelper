@@ -10,7 +10,7 @@ FROM alpine:latest
 WORKDIR /app
 
 # Copy the relevant binary from the builder stage
-# COPY --from=builder /app/PandoraHelper /app/PandoraHelper
+COPY --from=builder /app/PandoraHelper /app/PandoraHelper
 
 # Set executable permissions for the binary
 # RUN chmod +x /app/PandoraHelper
