@@ -1,14 +1,11 @@
-# 使用 Ubuntu 作为基础镜像
-FROM ubuntu:latest
+# 使用 Alpine 作为基础镜像
+FROM alpine:latest
 
 # 设置工作目录
 WORKDIR /app
 
-# 更新包列表并安装必要的依赖（如果有）
-# 如果你的二进制文件不需要额外的依赖，可以省略这一步
-RUN apt-get update && apt-get install -y \
-    ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+# 安装 libc6-compat 以支持 glibc 二进制文件
+RUN apk add --no-cache libc6-compat
 
 # 复制 PandoraHelper 二进制文件到 /app 目录
 COPY ./builds/PandoraHelper-main-linux-amd64/PandoraHelper /app/PandoraHelper
