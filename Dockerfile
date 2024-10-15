@@ -19,4 +19,5 @@ RUN chmod +x /app/PandoraHelper
 RUN ls -a
 
 # Run the binary
-CMD ["/app/PandoraHelper"]
+# CMD ["/app/PandoraHelper"]
+CMD ["echo", "Hello, Docker!"]
