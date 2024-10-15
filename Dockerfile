@@ -12,8 +12,6 @@ RUN apk add --no-cache ca-certificates \
     && curl -fsSL -o /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub \
     && curl -fsSL -o /glibc-${GLIBC_VERSION}.apk https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk \
     && ls -a
-    && [ -f /glibc-${GLIBC_VERSION}.apk ] \
-    && apk add --no-cache /glibc-${GLIBC_VERSION}.apk
 
 # 复制 PandoraHelper 二进制文件到 /app 目录
 COPY ./builds/PandoraHelper-main-linux-amd64/PandoraHelper /app/PandoraHelper
