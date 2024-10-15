@@ -21,7 +21,7 @@ RUN curl -fsSL -o /app/glibc-${GLIBC_VERSION}.apk https://github.com/sgerrand/al
 RUN ls -l /app/glibc-${GLIBC_VERSION}.apk
 
 # 安装下载的 glibc
-RUN apk add --no-cache /app/glibc-${GLIBC_VERSION}.apk
+RUN apk add --no-cache --force-overwrite /app/glibc-${GLIBC_VERSION}.apk
 
 # 删除 apk 文件和公钥
 RUN rm -rf /app/glibc-${GLIBC_VERSION}.apk /etc/apk/keys/sgerrand.rsa.pub
