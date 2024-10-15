@@ -13,7 +13,7 @@ WORKDIR /app
 COPY --from=builder /app/PandoraHelper /app/PandoraHelper
 
 # Set executable permissions for the binary
-# RUN chmod +x /app/PandoraHelper
+RUN chmod +x /app/PandoraHelper
 
 # Check the final structure of /app
 RUN ls -a
