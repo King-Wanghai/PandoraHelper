@@ -8,7 +8,7 @@ WORKDIR /app
 ENV GLIBC_VERSION=2.34-r0
 
 RUN apk add --no-cache ca-certificates \
-    && apk add --no-cache --virtual .build-deps curl \
+    && apk add --no-cache --virtual .build-deps curl
 
 # 复制 PandoraHelper 二进制文件到 /app 目录
 COPY ./builds/PandoraHelper-main-linux-amd64/PandoraHelper /app/PandoraHelper
