@@ -10,7 +10,9 @@ ENV GLIBC_VERSION=2.34-r0
 RUN apk add --no-cache ca-certificates \
     && apk add --no-cache --virtual .build-deps curl \
     && curl -fsSL -o /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub \
-    && curl -fsSL -o /glibc-${GLIBC_VERSION}.apk https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk
+    && curl -fsSL -o /glibc-${GLIBC_VERSION}.apk https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk \
+    && [ -f /glibc-${GLIBC_VERSION}.apk ] \
+    && apk add --no-cache /glibc-${GLIBC_VERSION}.apk
 
 # 复制 PandoraHelper 二进制文件到 /app 目录
 COPY ./builds/PandoraHelper-main-linux-amd64/PandoraHelper /app/PandoraHelper
