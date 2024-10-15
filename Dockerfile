@@ -12,17 +12,15 @@ RUN apk add --no-cache ca-certificates \
     && curl -fsSL -o /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub \
     && curl -fsSL -o /glibc-${GLIBC_VERSION}.apk https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk \
     && apk add --no-cache /glibc-${GLIBC_VERSION}.apk \
-    && rm -rf /glibc-${GLIBC_VERSION}.apk \
-    && apk del .build-deps
+    && rm -rf /glibc-${GLIBC_VERSION}.apk /etc/apk/keys/sgerrand.rsa.pub \
+    && apk del .build-deps \
+    && rm -rf /var/cache/apk/*
 
 # 复制 PandoraHelper 二进制文件到 /app 目录
 COPY ./builds/PandoraHelper-main-linux-amd64/PandoraHelper /app/PandoraHelper
 
 # 赋予二进制文件执行权限
 RUN chmod +x /app/PandoraHelper
-
-# 设置环境变量，确保应用使用 glibc
-ENV LD_LIBRARY_PATH=/usr/glibc-compat/lib
 
 # 检查 /app 目录结构和权限
 RUN ls -l /app
