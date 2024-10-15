@@ -5,7 +5,7 @@ FROM frolvlad/alpine-glibc:latest
 WORKDIR /app
 
 # 下载并安装更高版本的 glibc，并清理缓存以减小镜像体积
-ENV GLIBC_VERSION="2.35-r1"
+ENV GLIBC_VERSION="2.34-r0"
 
 RUN apk add --no-cache ca-certificates curl \
     && curl -fsSL -o /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub \
