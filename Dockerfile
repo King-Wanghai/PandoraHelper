@@ -5,6 +5,9 @@ WORKDIR /app
 # Copy the amd64 binary
 COPY ./builds/PandoraHelper-main-linux-amd64/PandoraHelper /app/PandoraHelper
 
+# Set executable permissions for the binary
+RUN chmod +x /app/PandoraHelper
+
 # Final image
 FROM alpine:latest
 WORKDIR /app
@@ -13,10 +16,10 @@ WORKDIR /app
 COPY --from=builder /app/PandoraHelper /app/PandoraHelper
 
 # Set executable permissions for the binary
-RUN chmod +x /app/PandoraHelper
+# RUN chmod +x /app/PandoraHelper
 
 # Check the final structure of /app
-RUN ls -a
+RUN ls -l /app
 
 # Run the binary
 CMD ["/app/PandoraHelper"]
