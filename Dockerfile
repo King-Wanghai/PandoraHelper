@@ -5,15 +5,17 @@ FROM alpine:latest
 WORKDIR /app
 
 # 安装必要的依赖和 glibc
-RUN apk --no-cache add ca-certificates \
-    && apk --no-cache add --virtual .build-deps curl \
+ENV GLIBC_VERSION="2.35-r0"
+
+RUN apk add --no-cache \
+    ca-certificates \
+    && apk add --no-cache --virtual .build-deps curl \
     && curl -Lo /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub \
-    && curl -Lo glibc.apk https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.36-r0/glibc-2.36-r0.apk \
-    && curl -Lo glibc-bin.apk https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.36-r0/glibc-bin-2.36-r0.apk \
-    && apk add glibc.apk glibc-bin.apk \
-    && /usr/glibc-compat/bin/ldconfig \
-    && apk del .build-deps \
-    && rm -rf glibc.apk glibc-bin.apk
+    && curl -Lo /glibc-${GLIBC_VERSION}.apk https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk \
+    && apk add --no-cache /glibc-${GLIBC_VERSION}.apk \
+    && rm -rf /glibc-${GLIBC_VERSION}.apk \
+    && apk del .build-deps
+
 
 # 复制 PandoraHelper 二进制文件到 /app 目录
 COPY ./builds/PandoraHelper-main-linux-amd64/PandoraHelper /app/PandoraHelper
