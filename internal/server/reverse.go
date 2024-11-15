@@ -27,12 +27,10 @@ func NewChatGPTReverseProxyServer(
 	if conf.GetString("moderation.apiKey") != "" && conf.GetString("moderation.apiUrl") != "" {
 		r.POST("/backend-api/conversation",
 			middleware.ContentModerationMiddleware(conf, logger),
-			conversationLoggerMiddleware.ChatGptLogConversation(),
 			proxyHandler,
 		)
 	} else {
 		r.POST("/backend-api/conversation",
-			conversationLoggerMiddleware.ChatGptLogConversation(),
 			proxyHandler,
 		)
 	}
@@ -73,12 +71,10 @@ func NewClaudeReverseProxyServer(
 	if conf.GetString("moderation.apiKey") != "" && conf.GetString("moderation.apiUrl") != "" {
 		r.POST("/api/organizations/:id1/chat_conversations/:id2/completion",
 			middleware.ContentModerationMiddleware(conf, logger),
-			conversationLoggerMiddleware.ClaudeLogConversation(),
 			proxyHandler,
 		)
 	} else {
 		r.POST("/api/organizations/:id1/chat_conversations/:id2/completion",
-			conversationLoggerMiddleware.ClaudeLogConversation(),
 			proxyHandler,
 		)
 	}
